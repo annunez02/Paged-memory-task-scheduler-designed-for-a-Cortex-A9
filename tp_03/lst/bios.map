@@ -1,0 +1,573 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+public_ram       0x0000000070010000 0x0000000000100000
+public_stack     0x0000000070020000 0x0000000000100000
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+                0x0000000000000000                _ISR_TABLE_INIT = 0x0
+                0x0000000070010000                _PUBLIC_RAM_INIT = 0x70010000
+                0x0000000070020000                _PUBLIC_STACK_INIT = 0x70020000
+                0x0000000000000080                IRQ_STACK_SIZE = 0x80
+                0x0000000000000080                FIQ_STACK_SIZE = 0x80
+                0x0000000000000080                SVC_STACK_SIZE = 0x80
+                0x0000000000000080                ABT_STACK_SIZE = 0x80
+                0x0000000000000080                UND_STACK_SIZE = 0x80
+                0x0000000000000400                SYS_STACK_SIZE = 0x400
+                0x0000000000000100                TASK_IDLE_STACK_SIZE = 0x100
+                0x0000000000000100                TASK_1_STACK_SIZE = 0x100
+                0x0000000000000100                TASK_2_STACK_SIZE = 0x100
+                0x0000000000001000                C_STACK_SIZE = 0x1000
+                0x0000000070010000                __RESET_PHYSICAL = 0x70010000
+                0x0000000070020000                __PUBLIC_STACK_PHYSICAL = 0x70020000
+                0x0000000000000000                __ISR_TABLE_PHYSICAL = 0x0
+                0x0000000070030000                __KERNEL_TXT_PHYSICAL = 0x70030000
+                0x0000000070022000                __KERNEL_BSS_PHYSICAL = 0x70022000
+                0x0000000070032000                __KERNEL_DATA_PHYSICAL = 0x70032000
+                0x0000000070023000                __KERNEL_RODATA_PHYSICAL = 0x70023000
+                0x0000000070020000                __KERNEL_PILA_PHY = 0x70020000
+                0x0000000070020000                __KERNEL_PILA_IRQ_PHY = __KERNEL_PILA_PHY
+                0x0000000070020080                __KERNEL_PILA_SYS_PHY = (__KERNEL_PILA_IRQ_PHY + IRQ_STACK_SIZE)
+                0x0000000070020480                __KERNEL_PILA_SVC_PHY = (__KERNEL_PILA_SYS_PHY + SYS_STACK_SIZE)
+                0x0000000070020500                __KERNEL_PILA_UND_PHY = (__KERNEL_PILA_SVC_PHY + SVC_STACK_SIZE)
+                0x0000000070020580                __KERNEL_PILA_ABT_PHY = (__KERNEL_PILA_UND_PHY + UND_STACK_SIZE)
+                0x0000000070020080                __task_idle_irq_stack_top__PHY = (__KERNEL_PILA_IRQ_PHY + IRQ_STACK_SIZE)
+                0x0000000070020500                __task_idle_svc_stack_top__PHY = (__KERNEL_PILA_SVC_PHY + SVC_STACK_SIZE)
+                0x0000000070080000                __SYSTABLES_PHYSICAL = 0x70080000
+                0x0000000070480000                __SYSTABLES_TAREA_1_PHY = 0x70480000
+                0x0000000070880000                __SYSTABLES_TAREA_2_PHY = 0x70880000
+                0x0000000070034000                __IDLE_TXT_PHY = 0x70034000
+                0x0000000080750000                __TAREA_1_TXT_PHY = 0x80750000
+                0x0000000080753000                __TAREA_1_BSS_PHY = 0x80753000
+                0x0000000080751000                __TAREA_1_DATA_PHY = 0x80751000
+                0x0000000080754000                __TAREA_1_RODATA_PHY = 0x80754000
+                0x0000000080740000                __TAREA_2_TXT_PHY = 0x80740000
+                0x0000000080743000                __TAREA_2_BSS_PHY = 0x80743000
+                0x0000000080741000                __TAREA_2_DATA_PHY = 0x80741000
+                0x0000000080744000                __TAREA_2_RODATA_PHY = 0x80744000
+                0x0000000080742000                __TAREA_1_PILA_PHY = 0x80742000
+                0x0000000080752000                __TAREA_2_PILA_PHY = 0x80752000
+                0x0000000080742000                __TAREA_1_PILA_IRQ_PHY = __TAREA_1_PILA_PHY
+                0x0000000080742080                __TAREA_1_PILA_SYS_PHY = (__TAREA_1_PILA_IRQ_PHY + IRQ_STACK_SIZE)
+                0x0000000080742480                __TAREA_1_PILA_SVC_PHY = (__TAREA_1_PILA_SYS_PHY + SYS_STACK_SIZE)
+                0x0000000080742500                __TAREA_1_PILA_UND_PHY = (__TAREA_1_PILA_SVC_PHY + SVC_STACK_SIZE)
+                0x0000000080742580                __TAREA_1_PILA_ABT_PHY = (__TAREA_1_PILA_UND_PHY + UND_STACK_SIZE)
+                0x0000000080742080                __task_1_irq_stack_top__PHY = (__TAREA_1_PILA_IRQ_PHY + IRQ_STACK_SIZE)
+                0x0000000080742500                __task_1_svc_stack_top__PHY = (__TAREA_1_PILA_SVC_PHY + SVC_STACK_SIZE)
+                0x0000000080752000                __TAREA_2_PILA_IRQ_PHY = __TAREA_2_PILA_PHY
+                0x0000000080752080                __TAREA_2_PILA_SYS_PHY = (__TAREA_2_PILA_IRQ_PHY + IRQ_STACK_SIZE)
+                0x0000000080752480                __TAREA_2_PILA_SVC_PHY = (__TAREA_2_PILA_SYS_PHY + SYS_STACK_SIZE)
+                0x0000000080752500                __TAREA_2_PILA_UND_PHY = (__TAREA_2_PILA_SVC_PHY + SVC_STACK_SIZE)
+                0x0000000080752580                __TAREA_2_PILA_ABT_PHY = (__TAREA_2_PILA_UND_PHY + UND_STACK_SIZE)
+                0x0000000080752080                __task_2_irq_stack_top__PHY = (__TAREA_2_PILA_IRQ_PHY + IRQ_STACK_SIZE)
+                0x0000000080752500                __task_2_svc_stack_top__PHY = (__TAREA_2_PILA_SVC_PHY + SVC_STACK_SIZE)
+                0x0000000080010000                __TAREA_1_READING_AREA_PHY = 0x80010000
+                0x0000000080000000                __TAREA_2_READING_AREA_PHY = 0x80000000
+                0x0000000070010000                __RESET_VMA = 0x70010000
+                0x0000000070020000                __PUBLIC_STACK_VMA = 0x70020000
+                0x0000000000000000                __ISR_TABLE_VMA = 0x0
+                0x0000000070030000                __KERNEL_TXT_VMA = 0x70030000
+                0x0000000070022000                __KERNEL_BSS_VMA = 0x70022000
+                0x0000000070032000                __KERNEL_DATA_VMA = 0x70032000
+                0x0000000070023000                __KERNEL_RODATA_VMA = 0x70023000
+                0x0000000070020000                __KERNEL_PILA_VMA = 0x70020000
+                0x0000000070020000                __KERNEL_PILA_IRQ_VMA = __KERNEL_PILA_VMA
+                0x0000000070020080                __KERNEL_PILA_SYS_VMA = (__KERNEL_PILA_IRQ_VMA + IRQ_STACK_SIZE)
+                0x0000000070020480                __KERNEL_PILA_SVC_VMA = (__KERNEL_PILA_SYS_VMA + SYS_STACK_SIZE)
+                0x0000000070020500                __KERNEL_PILA_UND_VMA = (__KERNEL_PILA_SVC_VMA + SVC_STACK_SIZE)
+                0x0000000070020580                __KERNEL_PILA_ABT_VMA = (__KERNEL_PILA_UND_VMA + UND_STACK_SIZE)
+                0x0000000070020080                __task_idle_irq_stack_top__VMA = (__KERNEL_PILA_IRQ_VMA + IRQ_STACK_SIZE)
+                0x0000000070020500                __task_idle_svc_stack_top__VMA = (__KERNEL_PILA_SVC_VMA + SVC_STACK_SIZE)
+                0x0000000070080000                __SYSTABLES_VMA = 0x70080000
+                0x0000000070480000                __SYSTABLES_TAREA_1_VMA = 0x70480000
+                0x0000000070880000                __SYSTABLES_TAREA_2_VMA = 0x70880000
+                0x0000000070034000                __IDLE_TXT_VMA = 0x70034000
+                0x0000000070f50000                __TAREA_1_TXT_VMA = 0x70f50000
+                0x0000000070f53000                __TAREA_1_BSS_VMA = 0x70f53000
+                0x0000000070f51000                __TAREA_1_DATA_VMA = 0x70f51000
+                0x0000000070f54000                __TAREA_1_RODATA_VMA = 0x70f54000
+                0x0000000070f40000                __TAREA_2_TXT_VMA = 0x70f40000
+                0x0000000070f43000                __TAREA_2_BSS_VMA = 0x70f43000
+                0x0000000070f41000                __TAREA_2_DATA_VMA = 0x70f41000
+                0x0000000070f44000                __TAREA_2_RODATA_VMA = 0x70f44000
+                0x0000000070f52000                __TAREA_1_PILA_VMA = 0x70f52000
+                0x0000000070f42000                __TAREA_2_PILA_VMA = 0x70f42000
+                0x0000000070f52000                __TAREA_1_PILA_IRQ_VMA = __TAREA_1_PILA_VMA
+                0x0000000070f52080                __TAREA_1_PILA_SYS_VMA = (__TAREA_1_PILA_IRQ_VMA + IRQ_STACK_SIZE)
+                0x0000000070f52480                __TAREA_1_PILA_SVC_VMA = (__TAREA_1_PILA_SYS_VMA + SYS_STACK_SIZE)
+                0x0000000070f52500                __TAREA_1_PILA_UND_VMA = (__TAREA_1_PILA_SVC_VMA + SVC_STACK_SIZE)
+                0x0000000070f52580                __TAREA_1_PILA_ABT_VMA = (__TAREA_1_PILA_UND_VMA + UND_STACK_SIZE)
+                0x0000000070f52080                __task_1_irq_stack_top__VMA = (__TAREA_1_PILA_IRQ_VMA + IRQ_STACK_SIZE)
+                0x0000000070f52500                __task_1_svc_stack_top__VMA = (__TAREA_1_PILA_SVC_VMA + SVC_STACK_SIZE)
+                0x0000000070f42000                __TAREA_2_PILA_IRQ_VMA = __TAREA_2_PILA_VMA
+                0x0000000070f42080                __TAREA_2_PILA_SYS_VMA = (__TAREA_2_PILA_IRQ_VMA + IRQ_STACK_SIZE)
+                0x0000000070f42480                __TAREA_2_PILA_SVC_VMA = (__TAREA_2_PILA_SYS_VMA + SYS_STACK_SIZE)
+                0x0000000070f42500                __TAREA_2_PILA_UND_VMA = (__TAREA_2_PILA_SVC_VMA + SVC_STACK_SIZE)
+                0x0000000070f42580                __TAREA_2_PILA_ABT_VMA = (__TAREA_2_PILA_UND_VMA + UND_STACK_SIZE)
+                0x0000000070f42080                __task_2_irq_stack_top__VMA = (__TAREA_2_PILA_IRQ_VMA + IRQ_STACK_SIZE)
+                0x0000000070f42500                __task_2_svc_stack_top__VMA = (__TAREA_2_PILA_SVC_VMA + SVC_STACK_SIZE)
+                0x0000000070a00000                __TAREA_1_READING_AREA_VMA = 0x70a00000
+                0x0000000070a10000                __TAREA_2_READING_AREA_VMA = 0x70a10000
+                0x0000000070010000                . = _PUBLIC_RAM_INIT
+
+.text           0x0000000070010000      0x434
+ *(.reset_vector*)
+ .reset_vector  0x0000000070010000        0x4 obj/reset.o
+                0x0000000070010000                _reset_vector
+ *(.handlers*)
+ .handlers      0x0000000070010004       0x48 obj/handlers.o
+                0x0000000070010004                _undefined
+                0x0000000070010008                _software_int
+                0x000000007001000c                _prefetch_abort
+                0x0000000070010010                _data_abort
+                0x0000000070010014                _IRQ
+                0x0000000070010048                _FIQ
+ *(.table_isr*)
+ .table_isr     0x000000007001004c       0x40 obj/tables.o
+                0x000000007001004c                _table_start
+ *(.startup*)
+ .startup       0x000000007001008c       0xa8 obj/startup.o
+                0x000000007001008c                _start
+ *(.text*)
+ .text          0x0000000070010134        0x0 obj/reset.o
+ .text          0x0000000070010134        0x0 obj/startup.o
+ .text          0x0000000070010134        0x0 obj/handlers.o
+ .text          0x0000000070010134        0x0 obj/tables.o
+ .text          0x0000000070010134        0x0 obj/low_level_cpu_access.o
+ *fill*         0x0000000070010134        0xc 
+ .text_pub      0x0000000070010140       0xc4 obj/low_level_cpu_access.o
+                0x0000000070010140                _irq_enable
+                0x0000000070010160                _irq_disable
+                0x000000007001017c                _LOAD_ISR_Vectors_Base
+                0x0000000070010190                _HALT_CPU
+                0x00000000700101b0                _READ_CPSR_REGS
+                0x00000000700101c0                _EOI
+                0x00000000700101d0                _WRITE_8
+                0x00000000700101d8                _WRITE_16
+                0x00000000700101e0                _WRITE_32
+                0x00000000700101e8                _READ_8
+                0x00000000700101f0                _READ_16
+                0x00000000700101f8                _READ_32
+ .text          0x0000000070010204      0x230 obj/memcpy.o
+                0x0000000070010204                memcopy
+                0x0000000070010284                memdeploy
+ .text          0x0000000070010434        0x0 obj/mmu_tools_.o
+ .text          0x0000000070010434        0x0 obj/mmu.o
+ .text          0x0000000070010434        0x0 obj/gic.o
+ .text          0x0000000070010434        0x0 obj/timer.o
+ .text          0x0000000070010434        0x0 obj/board_init.o
+ .text          0x0000000070010434        0x0 obj/kernel_handler_irq.o
+ .text          0x0000000070010434        0x0 obj/scheduler.o
+ .text          0x0000000070010434        0x0 obj/tarea_1.o
+ .text          0x0000000070010434        0x0 obj/tarea_2.o
+ .text          0x0000000070010434        0x0 obj/tarea_idle.o
+
+.glue_7         0x0000000070010434        0x0
+ .glue_7        0x0000000070010434        0x0 linker stubs
+
+.glue_7t        0x0000000070010434        0x0
+ .glue_7t       0x0000000070010434        0x0 linker stubs
+
+.vfp11_veneer   0x0000000070010434        0x0
+ .vfp11_veneer  0x0000000070010434        0x0 linker stubs
+
+.v4_bx          0x0000000070010434        0x0
+ .v4_bx         0x0000000070010434        0x0 linker stubs
+
+.iplt           0x0000000070010434        0x0
+ .iplt          0x0000000070010434        0x0 obj/reset.o
+
+.data           0x0000000070010434        0x0
+ *(.data*)
+ .data          0x0000000070010434        0x0 obj/reset.o
+ .data          0x0000000070010434        0x0 obj/startup.o
+ .data          0x0000000070010434        0x0 obj/handlers.o
+ .data          0x0000000070010434        0x0 obj/tables.o
+ .data          0x0000000070010434        0x0 obj/low_level_cpu_access.o
+ .data          0x0000000070010434        0x0 obj/memcpy.o
+ .data          0x0000000070010434        0x0 obj/mmu_tools_.o
+ .data          0x0000000070010434        0x0 obj/mmu.o
+ .data          0x0000000070010434        0x0 obj/gic.o
+ .data          0x0000000070010434        0x0 obj/timer.o
+ .data          0x0000000070010434        0x0 obj/board_init.o
+ .data          0x0000000070010434        0x0 obj/kernel_handler_irq.o
+ .data          0x0000000070010434        0x0 obj/scheduler.o
+ .data          0x0000000070010434        0x0 obj/tarea_1.o
+ .data          0x0000000070010434        0x0 obj/tarea_2.o
+ .data          0x0000000070010434        0x0 obj/tarea_idle.o
+
+.igot.plt       0x0000000070010434        0x0
+ .igot.plt      0x0000000070010434        0x0 obj/reset.o
+
+.bss            0x0000000070010434        0x0
+                0x0000000070010434                . = ALIGN (0x4)
+                0x0000000070010434                _bss_start__ = .
+ *(bss*)
+                0x0000000070010434                __bss_end__ = .
+ .bss           0x0000000070010434        0x0 obj/reset.o
+ .bss           0x0000000070010434        0x0 obj/startup.o
+ .bss           0x0000000070010434        0x0 obj/handlers.o
+ .bss           0x0000000070010434        0x0 obj/tables.o
+ .bss           0x0000000070010434        0x0 obj/low_level_cpu_access.o
+ .bss           0x0000000070010434        0x0 obj/memcpy.o
+ .bss           0x0000000070010434        0x0 obj/mmu_tools_.o
+ .bss           0x0000000070010434        0x0 obj/mmu.o
+ .bss           0x0000000070010434        0x0 obj/gic.o
+ .bss           0x0000000070010434        0x0 obj/timer.o
+ .bss           0x0000000070010434        0x0 obj/board_init.o
+ .bss           0x0000000070010434        0x0 obj/kernel_handler_irq.o
+ .bss           0x0000000070010434        0x0 obj/scheduler.o
+ .bss           0x0000000070010434        0x0 obj/tarea_1.o
+ .bss           0x0000000070010434        0x0 obj/tarea_2.o
+ .bss           0x0000000070010434        0x0 obj/tarea_idle.o
+                0x0000000070010434                __KERNEL_TXT_LMA = .
+
+.kernel         0x0000000070030000     0x1534 load address 0x0000000070010434
+ *(.kernel_text*)
+ .kernel_text   0x0000000070030000      0x434 obj/mmu_tools_.o
+                0x0000000070030000                MMU_Get_ID_MMFR0
+                0x0000000070030028                MMU_Get_ID_MMFR1
+                0x0000000070030050                MMU_Get_ID_MMFR2
+                0x0000000070030078                MMU_Get_ID_MMFR3
+                0x00000000700300a0                MMU_Get_TTBCR
+                0x00000000700300c8                MMU_Set_TTBCR
+                0x00000000700300f8                MMU_Get_DACR
+                0x0000000070030120                MMU_Set_DACR
+                0x0000000070030150                MMU_Get_TTBR0
+                0x0000000070030178                MMU_Set_TTBR0
+                0x00000000700301a8                MMU_Get_TTBR1
+                0x00000000700301d0                MMU_Set_TTBR1
+                0x0000000070030200                MMU_Get_SCTLR
+                0x0000000070030228                MMU_Set_SCTLR
+                0x0000000070030258                MMU_Get_VBAR
+                0x0000000070030280                MMU_Set_VBAR
+                0x00000000700302a8                MMU_Get_FirstLevelTranslationTable_PhysicalAddress
+                0x0000000070030310                MMU_Set_FirstLevelTranslationTable_PhysicalAddress
+                0x0000000070030378                MMU_Enable_AccessFlag
+                0x00000000700303c4                MMU_Enable
+                0x0000000070030410                MMU_Invalidate_TLB
+ .kernel_text   0x0000000070030434      0xab4 obj/mmu.o
+                0x0000000070030434                __level1_page_init
+                0x0000000070030490                __level2_page_init
+                0x00000000700304f0                __mmu_init
+ .kernel_text   0x0000000070030ee8       0x7c obj/gic.o
+                0x0000000070030ee8                __gic_init
+ .kernel_text   0x0000000070030f64       0x7c obj/timer.o
+                0x0000000070030f64                __timer_init
+ .kernel_text   0x0000000070030fe0       0x28 obj/board_init.o
+                0x0000000070030fe0                board_init
+ .kernel_text   0x0000000070031008      0x118 obj/kernel_handler_irq.o
+                0x0000000070031008                kernel_handler_irq
+ .kernel_text   0x0000000070031120      0x414 obj/scheduler.o
+                0x0000000070031120                __scheduler_init
+                0x00000000700313d4                scheduler_c
+ *(.rel.kernel*)
+                0x0000000070031534                . = ALIGN (0x4)
+                0x0000000000001534                __kernel_size__ = SIZEOF (.kernel)
+                0x0000000070011968                __KERNEL_BSS_LMA = (__kernel_size__ + __KERNEL_TXT_LMA)
+
+.kernel_bss     0x0000000070022000        0x0 load address 0x0000000070011968
+ *(.kernel_bss*)
+                0x0000000070022000                . = ALIGN (0x4)
+                0x0000000000000000                __kernel_bss_size__ = SIZEOF (.kernel_bss)
+                0x0000000070011968                __KERNEL_DATA_LMA = (__kernel_bss_size__ + __KERNEL_BSS_LMA)
+
+.kernel_data    0x0000000070032000       0xc0 load address 0x0000000070011968
+ *(.kernel_data*)
+ .kernel_data   0x0000000070032000       0xc0 obj/scheduler.o
+                0x0000000070032000                ticks
+                0x0000000070032004                current_task
+                0x0000000070032008                task_switch
+                0x000000007003200c                tcb_tareas
+                0x000000007003206c                ticks_task
+                0x0000000070032078                task_mem_irq_phy
+                0x0000000070032084                task_mem_svc_phy
+                0x0000000070032090                task_mem_irq_vma
+                0x000000007003209c                task_mem_svc_vma
+                0x00000000700320a8                task_ttbr0
+                0x00000000700320b4                funciones
+                0x00000000700320c0                . = ALIGN (0x4)
+                0x00000000000000c0                __kernel_data_size__ = SIZEOF (.kernel_data)
+                0x0000000070011a28                __KERNEL_RODATA_LMA = (__kernel_data_size__ + __KERNEL_DATA_LMA)
+
+.rodata_kernel  0x0000000070023000        0x0 load address 0x0000000070011a28
+ *(.kernel_rodata*)
+                0x0000000070023000                . = ALIGN (0x4)
+                0x0000000000000000                __kernel_rodata_size__ = SIZEOF (.rodata_kernel)
+                0x0000000070011a28                __IDLE_TXT_LMA = (__kernel_rodata_size__ + __KERNEL_RODATA_LMA)
+
+.txt_tarea_idle
+                0x0000000070034000       0x10 load address 0x0000000070011a28
+ *(.idle_text*)
+ .idle_text     0x0000000070034000       0x10 obj/tarea_idle.o
+                0x0000000070034000                __tarea_idle
+                0x0000000070034010                . = ALIGN (0x4)
+                0x0000000000000010                __idle_size__ = SIZEOF (.txt_tarea_idle)
+                0x0000000070011a38                __TAREA_1_TXT_LMA = (__idle_size__ + __IDLE_TXT_LMA)
+
+.txt_tarea_1    0x0000000070f50000       0xdc load address 0x0000000070011a38
+ *(.tarea_1_txt*)
+ .tarea_1_txt   0x0000000070f50000       0xdc obj/tarea_1.o
+                0x0000000070f50000                __tarea_1
+                0x0000000070f500dc                . = ALIGN (0x4)
+                0x00000000000000dc                __txt_tarea_1_size__ = SIZEOF (.txt_tarea_1)
+                0x0000000070011b14                __TAREA_1_BSS_LMA = (__txt_tarea_1_size__ + __TAREA_1_TXT_LMA)
+
+.bss_tarea_1    0x0000000070f53000        0x0 load address 0x0000000070011b14
+ *(.tarea_1_bss*)
+                0x0000000070f53000                . = ALIGN (0x4)
+                0x0000000000000000                __bss_tarea_1_size__ = SIZEOF (.bss_tarea_1)
+                0x0000000070011b14                __TAREA_1_DATA_LMA = (__bss_tarea_1_size__ + __TAREA_1_BSS_LMA)
+
+.data_tarea_1   0x0000000070f51000        0x0 load address 0x0000000070011b14
+ *(.tarea_1_data*)
+                0x0000000070f51000                . = ALIGN (0x4)
+                0x0000000000000000                __data_tarea_1_size__ = SIZEOF (.data_tarea_1)
+                0x0000000070011b14                __TAREA_1_RODATA_LMA = (__data_tarea_1_size__ + __TAREA_1_DATA_LMA)
+
+.rodata_tarea_1
+                0x0000000070f54000        0x0 load address 0x0000000070011b14
+ *(.tarea_1_rodata*)
+                0x0000000070f54000                . = ALIGN (0x4)
+                0x0000000000000000                __rodata_tarea_1_size__ = SIZEOF (.rodata_tarea_1)
+                0x0000000070011b14                __TAREA_2_TXT_LMA = (__rodata_tarea_1_size__ + __TAREA_1_RODATA_LMA)
+
+.txt_tarea_2    0x0000000070f40000       0x78 load address 0x0000000070011b14
+ *(.tarea_2_txt*)
+ .tarea_2_txt   0x0000000070f40000       0x78 obj/tarea_2.o
+                0x0000000070f40000                __tarea_2
+                0x0000000070f40078                . = ALIGN (0x4)
+                0x0000000000000078                __txt_tarea_2_size__ = SIZEOF (.txt_tarea_2)
+                0x0000000070011b8c                __TAREA_2_BSS_LMA = (__txt_tarea_2_size__ + __TAREA_2_TXT_LMA)
+
+.rel.dyn        0x0000000070f40078        0x0 load address 0x0000000070011b8c
+ .rel.iplt      0x0000000070f40078        0x0 obj/reset.o
+
+.bss_tarea_2    0x0000000070f43000        0x0 load address 0x0000000070011b8c
+ *(.tarea_2_bss*)
+                0x0000000070f43000                . = ALIGN (0x4)
+                0x0000000000000000                __bss_tarea_2_size__ = SIZEOF (.bss_tarea_2)
+                0x0000000070011b8c                __TAREA_2_DATA_LMA = (__bss_tarea_2_size__ + __TAREA_2_BSS_LMA)
+
+.data_tarea_2   0x0000000070f41000        0x0 load address 0x0000000070011b8c
+ *(.tarea_2_data*)
+                0x0000000070f41000                . = ALIGN (0x4)
+                0x0000000000000000                __data_tarea_2_size__ = SIZEOF (.data_tarea_2)
+                0x0000000070011b8c                __TAREA_2_RODATA_LMA = (__data_tarea_2_size__ + __TAREA_2_DATA_LMA)
+
+.rodata_tarea_2
+                0x0000000070f44000        0x0 load address 0x0000000070011b8c
+ *(.tarea_2_rodata*)
+                0x0000000070f44000                . = ALIGN (0x4)
+                0x0000000000000000                __rodata_tarea_2_size__ = SIZEOF (.rodata_tarea_2)
+                0x0000000070020000                . = _PUBLIC_STACK_INIT
+
+.stack          0x0000000070020000      0x680
+                0x0000000070020000                __stack_start__ = .
+                0x0000000070020080                . = (. + IRQ_STACK_SIZE)
+ *fill*         0x0000000070020000       0x80 
+                0x0000000070020080                . = ALIGN (0x4)
+                0x0000000070020080                __irq_stack_top__ = .
+                0x0000000070020100                . = (. + FIQ_STACK_SIZE)
+ *fill*         0x0000000070020080       0x80 
+                0x0000000070020100                . = ALIGN (0x4)
+                0x0000000070020100                __fiq_stack_top__ = .
+                0x0000000070020180                . = (. + SVC_STACK_SIZE)
+ *fill*         0x0000000070020100       0x80 
+                0x0000000070020180                . = ALIGN (0x4)
+                0x0000000070020180                __svc_stack_top__ = .
+                0x0000000070020200                . = (. + ABT_STACK_SIZE)
+ *fill*         0x0000000070020180       0x80 
+                0x0000000070020200                . = ALIGN (0x4)
+                0x0000000070020200                __abt_stack_top__ = .
+                0x0000000070020280                . = (. + UND_STACK_SIZE)
+ *fill*         0x0000000070020200       0x80 
+                0x0000000070020280                . = ALIGN (0x4)
+                0x0000000070020280                __und_stack_top__ = .
+                0x0000000070020680                . = (. + SYS_STACK_SIZE)
+ *fill*         0x0000000070020280      0x400 
+                0x0000000070020680                . = ALIGN (0x4)
+                0x0000000070020680                __sys_stack_top__ = .
+                0x0000000070020680                __stack_end__ = .
+LOAD obj/reset.o
+LOAD obj/startup.o
+LOAD obj/handlers.o
+LOAD obj/tables.o
+LOAD obj/low_level_cpu_access.o
+LOAD obj/memcpy.o
+LOAD obj/mmu_tools_.o
+LOAD obj/mmu.o
+LOAD obj/gic.o
+LOAD obj/timer.o
+LOAD obj/board_init.o
+LOAD obj/kernel_handler_irq.o
+LOAD obj/scheduler.o
+LOAD obj/tarea_1.o
+LOAD obj/tarea_2.o
+LOAD obj/tarea_idle.o
+OUTPUT(obj/bios.elf elf32-littlearm)
+
+.ARM.attributes
+                0x0000000000000000       0x2e
+ .ARM.attributes
+                0x0000000000000000       0x12 obj/reset.o
+ .ARM.attributes
+                0x0000000000000012       0x16 obj/startup.o
+ .ARM.attributes
+                0x0000000000000028       0x12 obj/handlers.o
+ .ARM.attributes
+                0x000000000000003a       0x12 obj/tables.o
+ .ARM.attributes
+                0x000000000000004c       0x18 obj/low_level_cpu_access.o
+ .ARM.attributes
+                0x0000000000000064       0x2f obj/memcpy.o
+ .ARM.attributes
+                0x0000000000000093       0x2f obj/mmu_tools_.o
+ .ARM.attributes
+                0x00000000000000c2       0x2f obj/mmu.o
+ .ARM.attributes
+                0x00000000000000f1       0x2f obj/gic.o
+ .ARM.attributes
+                0x0000000000000120       0x2f obj/timer.o
+ .ARM.attributes
+                0x000000000000014f       0x2f obj/board_init.o
+ .ARM.attributes
+                0x000000000000017e       0x2f obj/kernel_handler_irq.o
+ .ARM.attributes
+                0x00000000000001ad       0x2f obj/scheduler.o
+ .ARM.attributes
+                0x00000000000001dc       0x2f obj/tarea_1.o
+ .ARM.attributes
+                0x000000000000020b       0x2f obj/tarea_2.o
+ .ARM.attributes
+                0x000000000000023a       0x2f obj/tarea_idle.o
+
+.comment        0x0000000000000000       0x11
+ .comment       0x0000000000000000       0x11 obj/memcpy.o
+                                         0x12 (size before relaxing)
+ .comment       0x0000000000000011       0x12 obj/mmu_tools_.o
+ .comment       0x0000000000000011       0x12 obj/mmu.o
+ .comment       0x0000000000000011       0x12 obj/gic.o
+ .comment       0x0000000000000011       0x12 obj/timer.o
+ .comment       0x0000000000000011       0x12 obj/board_init.o
+ .comment       0x0000000000000011       0x12 obj/kernel_handler_irq.o
+ .comment       0x0000000000000011       0x12 obj/scheduler.o
+ .comment       0x0000000000000011       0x12 obj/tarea_1.o
+ .comment       0x0000000000000011       0x12 obj/tarea_2.o
+ .comment       0x0000000000000011       0x12 obj/tarea_idle.o
+
+.debug_info     0x0000000000000000     0x4fd3
+ .debug_info    0x0000000000000000      0x675 obj/memcpy.o
+ .debug_info    0x0000000000000675      0xd7b obj/mmu_tools_.o
+ .debug_info    0x00000000000013f0      0x916 obj/mmu.o
+ .debug_info    0x0000000000001d06      0x32e obj/gic.o
+ .debug_info    0x0000000000002034      0x240 obj/timer.o
+ .debug_info    0x0000000000002274      0x762 obj/board_init.o
+ .debug_info    0x00000000000029d6      0xa1f obj/kernel_handler_irq.o
+ .debug_info    0x00000000000033f5      0x94a obj/scheduler.o
+ .debug_info    0x0000000000003d3f      0x64a obj/tarea_1.o
+ .debug_info    0x0000000000004389      0x62c obj/tarea_2.o
+ .debug_info    0x00000000000049b5      0x61e obj/tarea_idle.o
+
+.debug_abbrev   0x0000000000000000      0xb05
+ .debug_abbrev  0x0000000000000000       0xad obj/memcpy.o
+ .debug_abbrev  0x00000000000000ad      0x241 obj/mmu_tools_.o
+ .debug_abbrev  0x00000000000002ee      0x18a obj/mmu.o
+ .debug_abbrev  0x0000000000000478       0xe7 obj/gic.o
+ .debug_abbrev  0x000000000000055f       0xc7 obj/timer.o
+ .debug_abbrev  0x0000000000000626       0xab obj/board_init.o
+ .debug_abbrev  0x00000000000006d1      0x142 obj/kernel_handler_irq.o
+ .debug_abbrev  0x0000000000000813      0x193 obj/scheduler.o
+ .debug_abbrev  0x00000000000009a6       0x86 obj/tarea_1.o
+ .debug_abbrev  0x0000000000000a2c       0x75 obj/tarea_2.o
+ .debug_abbrev  0x0000000000000aa1       0x64 obj/tarea_idle.o
+
+.debug_aranges  0x0000000000000000      0x220
+ .debug_aranges
+                0x0000000000000000       0x28 obj/memcpy.o
+ .debug_aranges
+                0x0000000000000028       0xc0 obj/mmu_tools_.o
+ .debug_aranges
+                0x00000000000000e8       0x30 obj/mmu.o
+ .debug_aranges
+                0x0000000000000118       0x20 obj/gic.o
+ .debug_aranges
+                0x0000000000000138       0x20 obj/timer.o
+ .debug_aranges
+                0x0000000000000158       0x20 obj/board_init.o
+ .debug_aranges
+                0x0000000000000178       0x20 obj/kernel_handler_irq.o
+ .debug_aranges
+                0x0000000000000198       0x28 obj/scheduler.o
+ .debug_aranges
+                0x00000000000001c0       0x20 obj/tarea_1.o
+ .debug_aranges
+                0x00000000000001e0       0x20 obj/tarea_2.o
+ .debug_aranges
+                0x0000000000000200       0x20 obj/tarea_idle.o
+
+.debug_ranges   0x0000000000000000      0x170
+ .debug_ranges  0x0000000000000000       0x18 obj/memcpy.o
+ .debug_ranges  0x0000000000000018       0xb0 obj/mmu_tools_.o
+ .debug_ranges  0x00000000000000c8       0x20 obj/mmu.o
+ .debug_ranges  0x00000000000000e8       0x10 obj/gic.o
+ .debug_ranges  0x00000000000000f8       0x10 obj/timer.o
+ .debug_ranges  0x0000000000000108       0x10 obj/board_init.o
+ .debug_ranges  0x0000000000000118       0x10 obj/kernel_handler_irq.o
+ .debug_ranges  0x0000000000000128       0x18 obj/scheduler.o
+ .debug_ranges  0x0000000000000140       0x10 obj/tarea_1.o
+ .debug_ranges  0x0000000000000150       0x10 obj/tarea_2.o
+ .debug_ranges  0x0000000000000160       0x10 obj/tarea_idle.o
+
+.debug_line     0x0000000000000000     0x12d1
+ .debug_line    0x0000000000000000      0x188 obj/memcpy.o
+ .debug_line    0x0000000000000188      0x239 obj/mmu_tools_.o
+ .debug_line    0x00000000000003c1      0x30f obj/mmu.o
+ .debug_line    0x00000000000006d0      0x13a obj/gic.o
+ .debug_line    0x000000000000080a      0x13d obj/timer.o
+ .debug_line    0x0000000000000947      0x158 obj/board_init.o
+ .debug_line    0x0000000000000a9f      0x1b9 obj/kernel_handler_irq.o
+ .debug_line    0x0000000000000c58      0x240 obj/scheduler.o
+ .debug_line    0x0000000000000e98      0x17d obj/tarea_1.o
+ .debug_line    0x0000000000001015      0x179 obj/tarea_2.o
+ .debug_line    0x000000000000118e      0x143 obj/tarea_idle.o
+
+.debug_str      0x0000000000000000     0x1496
+ .debug_str     0x0000000000000000      0xa54 obj/memcpy.o
+                                        0xaa3 (size before relaxing)
+ .debug_str     0x0000000000000a54      0x4eb obj/mmu_tools_.o
+                                        0x669 (size before relaxing)
+ .debug_str     0x0000000000000f3f       0x5b obj/mmu.o
+                                        0xb19 (size before relaxing)
+ .debug_str     0x0000000000000f9a       0xf4 obj/gic.o
+                                        0x232 (size before relaxing)
+ .debug_str     0x000000000000108e       0xef obj/timer.o
+                                        0x246 (size before relaxing)
+ .debug_str     0x000000000000117d      0x1ce obj/board_init.o
+                                        0xc43 (size before relaxing)
+ .debug_str     0x000000000000134b       0x43 obj/kernel_handler_irq.o
+                                        0xd8e (size before relaxing)
+ .debug_str     0x000000000000138e       0x98 obj/scheduler.o
+                                        0xcd9 (size before relaxing)
+ .debug_str     0x0000000000001426       0x3a obj/tarea_1.o
+                                        0xaa9 (size before relaxing)
+ .debug_str     0x0000000000001460       0x18 obj/tarea_2.o
+                                        0xa87 (size before relaxing)
+ .debug_str     0x0000000000001478       0x1e obj/tarea_idle.o
+                                        0xa8d (size before relaxing)
+
+.debug_frame    0x0000000000000000      0x4f8
+ .debug_frame   0x0000000000000000       0x4c obj/memcpy.o
+ .debug_frame   0x000000000000004c      0x2b0 obj/mmu_tools_.o
+ .debug_frame   0x00000000000002fc       0x74 obj/mmu.o
+ .debug_frame   0x0000000000000370       0x30 obj/gic.o
+ .debug_frame   0x00000000000003a0       0x30 obj/timer.o
+ .debug_frame   0x00000000000003d0       0x2c obj/board_init.o
+ .debug_frame   0x00000000000003fc       0x30 obj/kernel_handler_irq.o
+ .debug_frame   0x000000000000042c       0x54 obj/scheduler.o
+ .debug_frame   0x0000000000000480       0x28 obj/tarea_1.o
+ .debug_frame   0x00000000000004a8       0x28 obj/tarea_2.o
+ .debug_frame   0x00000000000004d0       0x28 obj/tarea_idle.o
